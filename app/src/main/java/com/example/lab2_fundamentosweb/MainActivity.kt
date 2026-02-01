@@ -3,45 +3,133 @@ package com.example.lab2_fundamentosweb
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.lab2_fundamentosweb.ui.theme.Lab2fundamentosWebTheme
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            Lab2fundamentosWebTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+            MaterialTheme {
+                CharacterScreen()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun CharacterScreen() {
+
+
+    var str by remember { mutableIntStateOf(10) }
+    var dex by remember { mutableIntStateOf(10) }
+    var intStat by remember { mutableIntStateOf(10) }
+
+    val total = str + dex + intStat
+    val scope = rememberCoroutineScope()
+
+    fun rollStat(onResult: (Int) -> Unit) {
+        scope.launch {
+            repeat(10) {
+                onResult((1..20).random())
+                delay(60)
+            }
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Text(
+            text = "Character Creation",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // 🔽 Step 1: Reusable Rows
+        StatRow("STR", str) { rollStat { str = it } }
+        StatRow("DEX", dex) { rollStat { dex = it } }
+        StatRow("INT", intStat) { rollStat { intStat = it } }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // 🔢 Total
+        Text(
+            text = "Total: $total",
+            fontSize = 22.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // ⚠️ Validation Rule
+        if (total < 30) {
+            Text(
+                text = "Re-roll recommended!",
+                color = Color.Red,
+                fontWeight = FontWeight.Bold
+            )
+        } else if (total >= 50) {
+            Text(
+                text = "Godlike!",
+                color = Color(0xFFDAA520), // dorado
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    Lab2fundamentosWebTheme {
-        Greeting("Android")
+fun StatRow(
+    name: String,
+    value: Int,
+    onRoll: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp),
+        elevation = CardDefaults.cardElevation(4.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Text(
+                text = name,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.width(48.dp)
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Text(
+                text = value.toString(),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.weight(1f)
+            )
+
+            Button(onClick = onRoll) {
+                Text("Roll")
+            }
+        }
     }
 }
