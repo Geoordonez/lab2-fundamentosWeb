@@ -26,7 +26,8 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
+@Composable  // esta funcion dibuja en UI
+
 fun CharacterScreen() {
 
 
@@ -53,6 +54,7 @@ fun CharacterScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
+        // aqui esta el titulo de mi app
         Text(
             text = "Character Creation",
             color = Color.Red,
@@ -65,22 +67,25 @@ fun CharacterScreen() {
         Spacer(modifier = Modifier.height(24.dp))
 
 
+        // estos son mis estados
+
         StatRow("STR", str) { rollStat { str = it } }
         StatRow("DEX", dex) { rollStat { dex = it } }
         StatRow("INT", intStat) { rollStat { intStat = it } }
 
-        Spacer(modifier = Modifier.height(24.dp))
 
-
+        // aca se muestra la suma de los tres estados
         Text(
             text = "Total: $total",
-            fontSize = 22.sp,
+            fontSize =30.sp,
             fontWeight = FontWeight.SemiBold
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
 
+        // estas  son las conndicionales para decirle al usuario si es unn buen personaje
+        // o si se le recomienda volver a girar los dados
         if (total < 30) {
             Text(
                 text = "Re-roll recommended!",
@@ -111,11 +116,13 @@ fun StatRow(
                 containerColor = Color(0xFF1E1E1E)
             )
         ) {
+            // esto hace que se escriba de izquierda a derecha  [ TEXTO ]   [ NÚMERO ]   [ BOTÓN ]
             Row(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
+                // este texto se escribe como el titulo de cada fila
                 Text(
                     text = name,
                     fontWeight = FontWeight.Bold,
@@ -125,6 +132,8 @@ fun StatRow(
 
                 Spacer(modifier = Modifier.width(16.dp))
 
+
+                // este es el score de cada stadistica
                 Text(
                     text = value.toString(),
                     fontSize = 20.sp,
@@ -133,6 +142,7 @@ fun StatRow(
                     modifier = Modifier.weight(1f)
                 )
 
+                // este es el boton de roll
                 Button(onClick = onRoll,
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Blue,)
                 ) {
