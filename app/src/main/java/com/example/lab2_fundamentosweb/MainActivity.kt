@@ -30,9 +30,9 @@ class MainActivity : ComponentActivity() {
 fun CharacterScreen() {
 
 
-    var str by remember { mutableIntStateOf(10) }
-    var dex by remember { mutableIntStateOf(10) }
-    var intStat by remember { mutableIntStateOf(10) }
+    var str by remember { mutableIntStateOf(0) }
+    var dex by remember { mutableIntStateOf(0) }
+    var intStat by remember { mutableIntStateOf(0) }
 
     val total = str + dex + intStat
     val scope = rememberCoroutineScope()
@@ -55,8 +55,11 @@ fun CharacterScreen() {
 
         Text(
             text = "Character Creation",
+            color = Color.Red,
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold
+
+
         )
 
         Spacer(modifier = Modifier.height(24.dp))
