@@ -64,14 +64,14 @@ fun CharacterScreen() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 🔽 Step 1: Reusable Rows
+
         StatRow("STR", str) { rollStat { str = it } }
         StatRow("DEX", dex) { rollStat { dex = it } }
         StatRow("INT", intStat) { rollStat { intStat = it } }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 🔢 Total
+
         Text(
             text = "Total: $total",
             fontSize = 22.sp,
@@ -80,7 +80,7 @@ fun CharacterScreen() {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // ⚠️ Validation Rule
+
         if (total < 30) {
             Text(
                 text = "Re-roll recommended!",
@@ -90,8 +90,7 @@ fun CharacterScreen() {
         } else if (total >= 50) {
             Text(
                 text = "Godlike!",
-                color = Color(0xFFDAA520), // dorado
-                fontWeight = FontWeight.Bold
+                color = Color(0xFFDAA520),
             )
         }
     }
@@ -103,36 +102,42 @@ fun StatRow(
     value: Int,
     onRoll: () -> Unit
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 6.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
-    ) {
-        Row(
+        Card(
             modifier = Modifier
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxWidth()
+                .padding(vertical = 6.dp),
+            elevation = CardDefaults.cardElevation(4.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color(0xFF1E1E1E)
+            )
         ) {
+            Row(
+                modifier = Modifier.padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
 
-            Text(
-                text = name,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.width(48.dp)
-            )
+                Text(
+                    text = name,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier.width(48.dp)
+                )
 
-            Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(16.dp))
 
-            Text(
-                text = value.toString(),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.weight(1f)
-            )
+                Text(
+                    text = value.toString(),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.White,
+                    modifier = Modifier.weight(1f)
+                )
 
-            Button(onClick = onRoll) {
-                Text("Roll")
+                Button(onClick = onRoll,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue,)
+                ) {
+                    Text(text = "Roll")
+                }
             }
         }
     }
-}
